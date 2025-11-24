@@ -28,16 +28,12 @@
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 90vh;
-            max-height: 800px;
         }
 
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
         }
 
@@ -52,22 +48,103 @@
             opacity: 0.9;
         }
 
-        .chat-container {
-            flex: 1;
+        .features {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: #f5f5f5;
+            justify-content: space-around;
+            padding: 30px 20px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
         }
 
-        iframe {
-            width: 100%;
-            height: 100%;
+        .feature {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            font-size: 1.1em;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .feature p {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+
+        .content h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .content p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .chat-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border: none;
-            border-radius: 10px;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 600;
+        }
+
+        .chat-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .info-section {
+            padding: 30px;
             background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-section li {
+            padding: 10px 0;
+            color: #555;
+            font-size: 1em;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-section li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
         }
 
         .footer {
@@ -82,36 +159,6 @@
             font-size: 0.9em;
         }
 
-        .features {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
-            background: white;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .feature {
-            text-align: center;
-            flex: 1;
-            padding: 10px;
-        }
-
-        .feature-icon {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .feature h3 {
-            font-size: 1em;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        .feature p {
-            font-size: 0.85em;
-            color: #666;
-        }
-
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8em;
@@ -121,8 +168,12 @@
                 flex-direction: column;
             }
 
-            .container {
-                height: 95vh;
+            .feature {
+                margin-bottom: 20px;
+            }
+
+            .content {
+                padding: 30px 20px;
             }
         }
     </style>
@@ -138,27 +189,76 @@
             <div class="feature">
                 <div class="feature-icon">📚</div>
                 <h3>Knowledge Base</h3>
-                <p>Powered by comprehensive documentation</p>
+                <p>Powered by comprehensive documentation and verified sources</p>
             </div>
             <div class="feature">
                 <div class="feature-icon">⚡</div>
                 <h3>Instant Answers</h3>
-                <p>Get accurate responses in seconds</p>
+                <p>Get accurate, relevant responses in seconds</p>
             </div>
             <div class="feature">
                 <div class="feature-icon">💬</div>
                 <h3>Natural Chat</h3>
-                <p>Conversational AI interface</p>
+                <p>Conversational AI interface with memory</p>
             </div>
         </div>
 
-        <div class="chat-container">
-            <iframe src="https://srini19info.app.n8n.cloud/webhook/09383383-9de3-4826-84a7-30c6d9479b6d/chat"></iframe>
+        <div class="content">
+            <h2>Start Chatting Now</h2>
+            <p>Click the chat button below to ask questions and get instant answers from our AI assistant.</p>
+            <button class="chat-button" onclick="openChat()">💬 Open Chat Assistant</button>
+        </div>
+
+        <div class="info-section">
+            <h3>What Can I Help You With?</h3>
+            <ul>
+                <li>Answer questions based on our knowledge base</li>
+                <li>Provide detailed information with bullet points</li>
+                <li>Search through documentation instantly</li>
+                <li>Remember conversation context for better responses</li>
+                <li>Deliver accurate, source-based answers</li>
+            </ul>
         </div>
 
         <div class="footer">
             <p>Powered by n8n AI Workflow | © 2024 Oriana Expert</p>
         </div>
     </div>
+
+    <!-- n8n Chat Widget Script -->
+    <script type="module">
+        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+        let chatInstance = null;
+
+        window.openChat = function() {
+            if (!chatInstance) {
+                chatInstance = createChat({
+                    webhookUrl: 'https://srini19info.app.n8n.cloud/webhook/09383383-9de3-4826-84a7-30c6d9479b6d/chat',
+                    initialMessages: [
+                        'Hi there! 👋',
+                        'I am Oriana Expert. How can I assist you today?'
+                    ],
+                    i18n: {
+                        en: {
+                            title: 'Oriana Expert',
+                            subtitle: 'AI Knowledge Assistant',
+                            footer: '',
+                            getStarted: 'Start Conversation',
+                            inputPlaceholder: 'Type your question...',
+                        }
+                    },
+                    theme: {
+                        primaryColor: '#667eea',
+                    }
+                });
+            }
+            
+            // Open the chat
+            if (chatInstance.open) {
+                chatInstance.open();
+            }
+        };
+    </script>
 </body>
 </html>
