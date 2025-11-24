@@ -3,17 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oriana Expert - AI Assistant</title>
+    <title>Oriana Assistant</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #5b7cfa 0%, #8e44ad 100%);
+            --bg-gradient: linear-gradient(135deg, #6a85b6 0%, #bac8e0 100%); /* Fallback/Base */
+            --header-gradient: linear-gradient(to right, #6a82fb, #fc5c7d); /* Example, adjusted below */
+            --card-bg: #f4f6f8;
+            --user-msg-bg: #e1effe;
+            --bot-msg-bg: #ffffff;
+            --text-color: #333;
+            --sub-text: #666;
+            --accent-color: #5c7cfa; /* Blueish purple */
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%); /* Soft purple/blue background */
+            /* Matching the outer background from the image approximately */
+            background: #766ee6; 
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,244 +39,437 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 1200px;
+        .phone-container {
             width: 100%;
-            background: white;
+            max-width: 480px;
+            height: 85vh;
+            max-height: 800px;
+            background: #fff;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .features {
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             display: flex;
-            justify-content: space-around;
-            padding: 30px 20px;
-            background: white;
-            border-bottom: 1px solid #e0e0e0;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
 
-        .feature {
-            text-align: center;
-            flex: 1;
-            padding: 10px;
-        }
-
-        .feature-icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .feature h3 {
-            font-size: 1.1em;
-            color: #667eea;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .feature p {
-            font-size: 0.9em;
-            color: #666;
-            line-height: 1.4;
-        }
-
-        .content {
-            padding: 40px 30px;
-            text-align: center;
-            background: #f8f9fa;
-        }
-
-        .content h2 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.8em;
-        }
-
-        .content p {
-            color: #666;
-            font-size: 1.1em;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .chat-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-weight: 600;
-        }
-
-        .chat-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        .info-section {
-            padding: 30px;
-            background: white;
-        }
-
-        .info-section h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .info-section ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .info-section li {
-            padding: 10px 0;
-            color: #555;
-            font-size: 1em;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .info-section li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .footer {
-            background: #f8f9fa;
+        /* --- Header Section --- */
+        .chat-header {
+            background: linear-gradient(90deg, #5b7cfa 0%, #9b59b6 100%);
             padding: 20px;
             text-align: center;
-            border-top: 1px solid #e0e0e0;
+            color: white;
+            flex-shrink: 0;
         }
 
-        .footer p {
-            color: #666;
-            font-size: 0.9em;
+        .brand-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
+        .star-icon {
+            color: #ffd700;
+            font-size: 1.2rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
 
-            .features {
-                flex-direction: column;
-            }
+        .brand-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
 
-            .feature {
-                margin-bottom: 20px;
-            }
+        /* --- Status Bar --- */
+        .status-bar {
+            background: white;
+            color: #888;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #eee;
+            flex-shrink: 0;
+        }
 
-            .content {
-                padding: 30px 20px;
+        /* --- Chat Area --- */
+        .chat-messages {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: fadeIn 0.3s ease;
+            word-wrap: break-word;
+        }
+
+        /* Styles for Bullet Points and Markdown in Bot Messages */
+        .message ul, .message ol {
+            margin-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .message li {
+            margin-bottom: 4px;
+        }
+        
+        .message p {
+            margin-bottom: 8px;
+        }
+        
+        .message p:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot-message {
+            background: white;
+            color: #444;
+            border-top-left-radius: 2px;
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background: #5b7cfa; /* Blue accent */
+            color: white;
+            border-top-right-radius: 2px;
+            align-self: flex-end;
+        }
+
+        .msg-icon {
+            display: inline-block;
+            margin-left: 8px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 15px;
+            width: fit-content;
+            border-top-left-radius: 2px;
+            margin-bottom: 10px;
+            display: none; /* Hidden by default */
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #ccc;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* --- Footer / Input --- */
+        .chat-input-area {
+            background: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .mic-btn {
+            background: #6c8cff;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .send-btn {
+            background: #6c8cff;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+            color: #555;
+            background: #fff;
+        }
+
+        .input-field::placeholder {
+            color: #aaa;
+        }
+
+        .input-field:focus {
+            border-color: #6c8cff;
+        }
+
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 480px) {
+            .phone-container {
+                height: 100vh;
+                border-radius: 0;
+                max-height: none;
+            }
+            body {
+                padding: 0;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🤖 Oriana Expert</h1>
-            <p>Your AI-Powered Knowledge Assistant</p>
-        </div>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">📚</div>
-                <h3>Knowledge Base</h3>
-                <p>Powered by comprehensive documentation and verified sources</p>
+    <div class="phone-container">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="brand-title">
+                <i class="fas fa-star star-icon"></i>
+                <span>Oriana Assistant</span>
             </div>
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <h3>Instant Answers</h3>
-                <p>Get accurate, relevant responses in seconds</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">💬</div>
-                <h3>Natural Chat</h3>
-                <p>Conversational AI interface with memory</p>
+            <div class="brand-subtitle">
+                GRT Jewels - Multilingual Voice Support
             </div>
         </div>
 
-        <div class="content">
-            <h2>Start Chatting Now</h2>
-            <p>Click the chat button below to ask questions and get instant answers from our AI assistant.</p>
-            <button class="chat-button" onclick="openChat()">💬 Open Chat Assistant</button>
+        <!-- Status Bar -->
+        <div class="status-bar" id="statusBar">
+            Ready to help you!
         </div>
 
-        <div class="info-section">
-            <h3>What Can I Help You With?</h3>
-            <ul>
-                <li>Answer questions based on our knowledge base</li>
-                <li>Provide detailed information with bullet points</li>
-                <li>Search through documentation instantly</li>
-                <li>Remember conversation context for better responses</li>
-                <li>Deliver accurate, source-based answers</li>
-            </ul>
+        <!-- Chat Area -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- Initial Bot Message -->
+            <div class="message bot-message">
+                Hello! I am the Oriana assistant from GRT Jewels. I can help you with questions about Oriana products and brand. How can I assist you today? 
+                <i class="fas fa-volume-up msg-icon" title="Listen"></i>
+            </div>
+            
+            <!-- Typing Indicator (Hidden initially) -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
         </div>
 
-        <div class="footer">
-            <p>Powered by n8n AI Workflow | © 2024 Oriana Expert</p>
+        <!-- Input Area -->
+        <div class="chat-input-area">
+            <button class="action-btn mic-btn" title="Speak">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <input type="text" class="input-field" id="userInput" placeholder="Type or speak your question..." autocomplete="off">
+            <button class="action-btn send-btn" id="sendBtn" title="Send">
+                <i class="fas fa-paper-plane"></i>
+            </button>
         </div>
     </div>
 
-    <!-- n8n Chat Widget Script -->
-    <script type="module">
-        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const statusBar = document.getElementById('statusBar');
 
-        let chatInstance = null;
+        // n8n Webhook Configuration
+        const WEBHOOK_URL = 'https://srini19info.app.n8n.cloud/webhook/09383383-9de3-4826-84a7-30c6d9479b6d/chat';
+        
+        // Generate a random session ID to maintain context
+        let sessionId = localStorage.getItem('oriana_session_id');
+        if (!sessionId) {
+            sessionId = 'session-' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('oriana_session_id', sessionId);
+        }
 
-        window.openChat = function() {
-            if (!chatInstance) {
-                chatInstance = createChat({
-                    webhookUrl: 'https://srini19info.app.n8n.cloud/webhook/09383383-9de3-4826-84a7-30c6d9479b6d/chat',
-                    initialMessages: [
-                        'Hi there! 👋',
-                        'I am Oriana Expert. How can I assist you today?'
-                    ],
-                    i18n: {
-                        en: {
-                            title: 'Oriana Expert',
-                            subtitle: 'AI Knowledge Assistant',
-                            footer: '',
-                            getStarted: 'Start Conversation',
-                            inputPlaceholder: 'Type your question...',
-                        }
-                    },
-                    theme: {
-                        primaryColor: '#667eea',
-                    }
-                });
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Function to add a message to the chat
+        function addMessage(text, isUser = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            if (isUser) {
+                msgDiv.textContent = text;
+            } else {
+                // For bot, convert Markdown to HTML (handles bullet points)
+                try {
+                    // marked.parse renders the HTML string from markdown text
+                    msgDiv.innerHTML = marked.parse(text);
+                } catch (e) {
+                    console.error("Markdown parsing failed", e);
+                    msgDiv.textContent = text;
+                }
+                
+                // Add speaker icon
+                const icon = document.createElement('i');
+                icon.className = 'fas fa-volume-up msg-icon';
+                
+                // Get clean text for the alert (strip HTML tags)
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = msgDiv.innerHTML;
+                const cleanText = tempDiv.textContent || tempDiv.innerText || "";
+                
+                icon.onclick = () => alert('Reading text: ' + cleanText.substring(0, 50) + '...');
+                msgDiv.appendChild(icon);
             }
             
-            // Open the chat
-            if (chatInstance.open) {
-                chatInstance.open();
+            // Insert before typing indicator
+            chatMessages.insertBefore(msgDiv, typingIndicator);
+            scrollToBottom();
+        }
+
+        function showTyping(show) {
+            typingIndicator.style.display = show ? 'flex' : 'none';
+            if(show) scrollToBottom();
+        }
+
+        // Handle sending
+        async function handleSend() {
+            const text = userInput.value.trim();
+            if (text === "") return;
+
+            // 1. UI Updates
+            addMessage(text, true);
+            userInput.value = "";
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+            showTyping(true);
+            statusBar.textContent = "Oriana is thinking...";
+
+            try {
+                // 2. Send to n8n Backend
+                // The /chat endpoint typically expects this structure for the Chat Trigger node
+                const payload = {
+                    action: "sendMessage",
+                    sessionId: sessionId,
+                    chatInput: text
+                };
+
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                // 3. Handle Response
+                const data = await response.json();
+                
+                // n8n Chat Trigger usually returns { output: "response text" } or similar
+                // Adjust based on your specific node output configuration. 
+                // Common fields: 'output', 'text', or just the raw object if mapped differently.
+                let botResponse = "I received your message, but I'm not sure how to display the response.";
+                
+                if (data.output) {
+                    botResponse = data.output;
+                } else if (data.text) {
+                    botResponse = data.text;
+                } else if (typeof data === 'string') {
+                    botResponse = data;
+                } else {
+                    // Fallback: try to stringify the data for debugging
+                    console.log("Unknown response format:", data);
+                    botResponse = "Response received.";
+                }
+
+                addMessage(botResponse, false);
+                statusBar.textContent = "Ready to help you!";
+
+            } catch (error) {
+                console.error("Error sending message:", error);
+                addMessage("Sorry, I'm having trouble connecting to the server right now. Please try again.", false);
+                statusBar.textContent = "Connection Error";
+            } finally {
+                // 4. Reset UI
+                showTyping(false);
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                userInput.focus();
             }
-        };
+        }
+
+        // Event Listeners
+        sendBtn.addEventListener('click', handleSend);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
+
+        // Mic Button Simulation
+        document.querySelector('.mic-btn').addEventListener('click', () => {
+            // In a real implementation, this would use the Web Speech API
+            statusBar.textContent = "Listening...";
+            setTimeout(() => {
+                statusBar.textContent = "Ready to help you!";
+                alert("Voice input requires browser permission/SSL context. This is a UI demo.");
+            }, 1000);
+        });
+
     </script>
 </body>
 </html>
